@@ -111,8 +111,6 @@ const onGalleryCardClick = (event) => {
           src="${imageInfo.original}"
           data-source="${imageInfo.original}"
           alt="${imageInfo.description}"
-          widht="520"
-          height="360"
         />
       </a>
     </li>`);
