@@ -74,12 +74,13 @@ const images = [
 ];
 
 const createImageCard = (images) => {
-  return `   <li class="gallery-item" data-id="${images.id}">
-      <a class="gallery-link" href="${images.preview}">
+  return `   
+    <li class="gallery-item" data-id="${images.id}">
+      <a class="gallery-link" href="${images.original}">
         <img
           class="gallery-image"
           src="${images.preview}"
-          data-source="${images.preview}"
+          data-source="${images.original}"
           alt="${images.description}"
         />
       </a>
@@ -88,34 +89,34 @@ const createImageCard = (images) => {
 
 const imageCard = images
   .map((imageInfo) => createImageCard(imageInfo))
-  .join(``);
+  .join("");
 
 const galleryContainer = document.querySelector(".gallery");
 galleryContainer.innerHTML = imageCard;
 
 const onGalleryCardClick = (event) => {
-  if (event.target === event.currentTarget) {
+  if (event.target.nodeName !== "IMG") {
     return;
   }
-  const onGalleryCard = event.target.closest(`.gallery-item`);
+
+  event.preventDefault();
+
+  const onGalleryCard = event.target.closest(".gallery-item");
 
   const imageId = Number(onGalleryCard.dataset.id);
 
   const imageInfo = images.find((image) => image.id === imageId);
 
-  const modalInstance =
-    basicLightbox.create(`   <li class="gallery-item" data-id="${imageInfo.id}">
-      <a class="gallery-link" href="${imageInfo.original}">
-        <img
-          class="gallery-image"
-          src="${imageInfo.original}"
-          data-source="${imageInfo.original}"
-          alt="${imageInfo.description}"
-        />
-      </a>
-    </li>`);
+  const modalInstance = basicLightbox.create(`
+    <img
+      class="gallery-image"
+      src="${imageInfo.original}"
+      data-source="${imageInfo.original}"
+      alt="${imageInfo.description}"
+    />
+  `);
 
   modalInstance.show();
 };
 
-galleryContainer.addEventListener(`click`, onGalleryCardClick);
+galleryContainer.addEventListener("click", onGalleryCardClick);
